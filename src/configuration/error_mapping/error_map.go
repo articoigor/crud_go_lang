@@ -1,26 +1,43 @@
 package error_map
 
 type CurrError struct {
-	message string   `json: message`
-	err     string   `json: err`
-	code    int64    `json: code`
-	causes  []Causes `json: causes`
+	Message string  `json:"message"`
+	Err     string  `json:"err"`
+	Code    int     `json:"code"`
+	Causes  []Cause `json:"causes"`
 }
 
-type Causes struct {
-	field string `json: field`
-	cause string `json: cause`
+type Cause struct {
+	Field string `json:"field"`
+	Cause string `json:"cause"`
 }
 
 func (r *CurrError) Error() string {
-	return r.message
+	return r.Message
 }
 
-func NewError(message string, err string, code int64, causes []Causes) *CurrError {
+func NewError(message string, err string, code int, causes []Cause) *CurrError {
 	return &CurrError{
-		message: message,
-		err:     err,
-		code:    code,
-		causes:  causes,
+		Message: message,
+		Err:     err,
+		Code:    code,
+		Causes:  causes,
+	}
+}
+
+func NewErrorBadRequest(message string) *CurrError {
+	return &CurrError{
+		Message: message,
+		Err:     "bad_request",
+		Code:    404,
+	}
+}
+
+func NewErrorValidationBadRequest(message string, causes []Cause) *CurrError {
+	return &CurrError{
+		Message: message,
+		Err:     "bad_request",
+		Code:    404,
+		Causes:  causes,
 	}
 }
